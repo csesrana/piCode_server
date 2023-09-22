@@ -17,6 +17,9 @@ def prepareFiles(code,inp,out):
     code = (base64.b64decode(code)).decode('utf-8')
     inp = (base64.b64decode(inp)).decode('utf-8')
     out = (base64.b64decode(out)).decode('utf-8')
+    print(code)
+    print(inp)
+    print(out)
     code_path = createTempFile(code)
     inp_path = createTempFile(inp,".txt")
     out_path = createTempFile(out,".txt")
@@ -27,14 +30,13 @@ def cleanFiles(fileList):
           os.remove(fpath)
           
 def execute(code,inp,out):
-    #Convert the code from base64 to meaning full code
+    #Convert the code from base64 to meaning full code(decoded code) and returns absalute paths
     [code_path,inp_path,out_path]=prepareFiles(code,inp,out)
 
     batch_script_content = f"""@echo off
     python {code_path} < {inp_path}
     """
     bat_file_path = createTempFile(batch_script_content,".bat")
-
 
     start_time = time.time()
     completed_process = subprocess.run(
